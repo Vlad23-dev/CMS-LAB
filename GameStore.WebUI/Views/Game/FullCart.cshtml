@@ -1,0 +1,12 @@
+﻿@using GameStore.WebUI.Models
+@using GameStore.WebUI.HtmlHelpers
+@model GamesListViewModel
+
+@{
+    ViewBag.Title = "Games";
+}
+
+@foreach (var p in @Model.Games)
+{
+    @Html.Partial("GameFull", p)
+}

@@ -1,0 +1,58 @@
+﻿@model GameStore.WebUI.Models.CartIndexViewModel
+
+@{
+    ViewBag.Title = "GameStore: ваша корзина";
+}
+
+<style>
+    #cartTable td {
+        vertical-align: middle;
+    }
+</style>
+
+<h2>Your Cart</h2>
+
+<table id="cartTable" class="table">
+    <thead>
+        <tr>
+            <th>How-many</th>
+            <th>Game</th>
+            <th class="text-right">Price</th>
+            <th class="text-right">All Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var line in Model.Cart.Lines)
+        {
+            <tr>
+                <td class="text-center">@line.Quantity</td>
+                <td class="text-left">@line.Game.Name</td>
+                <td class="text-right">@line.Game.Price.ToString("# грн")</td>
+                <td class="text-right">
+                    @((line.Quantity * line.Game.Price).ToString("# грн"))
+                </td>
+                <td>
+                    @using (Html.BeginForm("RemoveFromCart", "Cart"))
+                    {
+                        @Html.Hidden("GameId", line.Game.GameId)
+                        @Html.HiddenFor(x => x.ReturnUrl)
+                        <input class="btn btn-sm btn-warning" type="submit" value="Delete" />
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3" class="text-right">Sum:</td>
+            <td class="text-right">
+                @Model.Cart.ComputeTotalValue().ToString("# руб")
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+<div class="text-center">
+    <a class="btn btn-primary" href="@Model.ReturnUrl">Continue</a>
+    @Html.ActionLink("Оформить заказ", "Checkout", null, new { @class = "btn btn-primary" })
+</div>
